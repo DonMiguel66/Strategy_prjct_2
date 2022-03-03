@@ -1,6 +1,6 @@
 {
     "name": "InjectAssetAttribute",
-    "rootNamespace": "",
+    "rootNamespace": "SimpleStrategy3D.Utils",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

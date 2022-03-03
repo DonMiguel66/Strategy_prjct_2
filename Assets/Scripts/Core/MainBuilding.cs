@@ -39,7 +39,7 @@ namespace SimpleStrategy3D.Core
 
         protected override void ExecuteSpecificCommand(IProduceUnitCommand command)
         {
-            throw new System.NotImplementedException();
+            Instantiate(command.UnitPrefab, new Vector3(Random.Range(-10, 10), 0, Random.Range(-10, 10)), Quaternion.identity, _unitsParent);
         }
     }
 }

@@ -2,6 +2,7 @@ using UnityEngine.UI;
 using UnityEngine;
 using SimpleStrategy3D.Abstractions;
 using SimpleStrategy3D.UIModels;
+using UnityEngine.Serialization;
 
 namespace SimpleStrategy3D.UIPresenters
 {
@@ -17,7 +18,7 @@ namespace SimpleStrategy3D.UIPresenters
 
         private void Start()
         {
-            _selectedValue.OnSelected += OnPointed;
+            _selectedValue.OnNewValue += OnPointed;
             OnPointed(_selectedValue.CurrentValue);
         }
 

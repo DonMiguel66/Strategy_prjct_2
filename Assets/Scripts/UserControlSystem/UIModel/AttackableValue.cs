@@ -5,7 +5,7 @@ using UnityEngine;
 namespace SimpleStrategy3D.UIModels
 {
     [CreateAssetMenu(fileName = nameof(AttackableValue), menuName = "Strategy Game/" + nameof(AttackableValue), order = 0)]
-    public class AttackableValue : ValueBase<IAttackable>
+    public class AttackableValue : ScriptableObjectValueBase<IAttackable>
     {
         public IAttackable CurrentValue { get; private set; }
         public Action<IAttackable> OnChange;

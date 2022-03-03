@@ -4,6 +4,7 @@ using SimpleStrategy3D.UIModels;
 using SimpleStrategy3D.UIView;
 using SimpleStrategy3D.Utils;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Zenject;
 
 namespace SimpleStrategy3D.UIPresenters
@@ -24,7 +25,7 @@ namespace SimpleStrategy3D.UIPresenters
             _model.OnCommandSent += _view.UnblockAllInteractions;
             _model.OnCommandCancel += _view.UnblockAllInteractions;
 
-            _selectable.OnSelected += OnSelected;
+            _selectable.OnNewValue += OnSelected;
             OnSelected(_selectable.CurrentValue);
         }
 

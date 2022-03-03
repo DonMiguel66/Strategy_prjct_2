@@ -3,6 +3,7 @@ using UnityEngine;
 using SimpleStrategy3D.Abstractions;
 using SimpleStrategy3D.UIModels;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.SimpleStrategy3D
 {
@@ -13,8 +14,8 @@ namespace Assets.Scripts.SimpleStrategy3D
 
         [SerializeField] private SelectableValue _selectedObject;
         [SerializeField] private EventSystem _eventSystem;
-
-        [SerializeField] private AttackableValue _attackablesRMB;
+        
+        [SerializeField] private AttackableValue _attackablesRmb;
         [SerializeField] private Vector3Value _groundClicksRMB;
         [SerializeField] private Transform _groundTransform;
 
@@ -44,7 +45,7 @@ namespace Assets.Scripts.SimpleStrategy3D
             {
                 if (IsHit<IAttackable>(hits, out var attackable))
                 {
-                    _attackablesRMB.SetValue(attackable);
+                    _attackablesRmb.SetValue(attackable);
                 }
                 else if (_groundPlane.Raycast(ray, out var enter))
                 {

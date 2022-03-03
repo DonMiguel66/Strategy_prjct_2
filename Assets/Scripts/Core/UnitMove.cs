@@ -1,5 +1,5 @@
 ﻿using SimpleStrategy3D.Abstractions;
-using UnityEngine;
+using UnityEngine.AI;
 
 namespace SimpleStrategy3D.Core
 {
@@ -7,7 +7,7 @@ namespace SimpleStrategy3D.Core
     {
         protected override void ExecuteSpecificCommand(IMoveCommand command)
         {
-            Debug.Log($"{name} is moving to {command.Target}!");
+            GetComponent<NavMeshAgent>().destination = command.Target;
         }
     }
 }

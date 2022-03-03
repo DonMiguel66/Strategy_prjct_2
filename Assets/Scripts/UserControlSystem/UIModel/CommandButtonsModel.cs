@@ -1,4 +1,5 @@
 using System;
+using Assets.Scripts.SimpleStrategy3D;
 using SimpleStrategy3D.Abstractions;
 using UnityEngine;
 using Zenject;
@@ -10,12 +11,12 @@ namespace SimpleStrategy3D.UIModels
         public event Action<ICommandExecutor> OnCommandAccepted;
         public event Action OnCommandSent;
         public event Action OnCommandCancel;
-
+        
         [Inject] private CommandCreatorBase<IProduceUnitCommand> _unitProducer;
         [Inject] private CommandCreatorBase<IAttackCommand> _attack;
-        [Inject] private CommandCreatorBase<IStopCommand> _stop;
         [Inject] private CommandCreatorBase<IMoveCommand> _move;
-        [Inject] private CommandCreatorBase<IPatrolCommand> _patrol;
+        //[Inject] private CommandCreatorBase<IStopCommand> _stop;
+        //[Inject] private CommandCreatorBase<IPatrolCommand> _patrol;
 
         private bool _commandIsPending;
 
@@ -33,12 +34,12 @@ namespace SimpleStrategy3D.UIModels
                 command => ExecuteCommandWrapper(commandExecutor, command));
             _attack.ProcessCommandExecutor(commandExecutor,
                 command => ExecuteCommandWrapper(commandExecutor, command));
-            _stop.ProcessCommandExecutor(commandExecutor,
-                command => ExecuteCommandWrapper(commandExecutor, command));
             _move.ProcessCommandExecutor(commandExecutor,
                 command => ExecuteCommandWrapper(commandExecutor, command));
-            _patrol.ProcessCommandExecutor(commandExecutor,
-                command => ExecuteCommandWrapper(commandExecutor, command));
+            //_stop.ProcessCommandExecutor(commandExecutor,
+            //    command => ExecuteCommandWrapper(commandExecutor, command));
+            //_patrol.ProcessCommandExecutor(commandExecutor,
+            //    command => ExecuteCommandWrapper(commandExecutor, command));
         }
 
         private void ExecuteCommandWrapper(ICommandExecutor commandExecutor, object command)
@@ -56,12 +57,12 @@ namespace SimpleStrategy3D.UIModels
 
         private void ProcessOnCancel()
         {
-            _unitProducer.ProcessCancel(); 
+            _unitProducer.ProcessCancel();
             _attack.ProcessCancel();
-            _stop.ProcessCancel();
-            _move.ProcessCancel();
-            _patrol.ProcessCancel();
             OnCommandCancel?.Invoke();
+            //_move.ProcessCancel();
+            //_stop.ProcessCancel();
+            //_patrol.ProcessCancel();
         }
     }
 }
