@@ -1,16 +1,17 @@
+using System;
 using System.Collections.Generic;
 using SimpleStrategy3D.Abstractions;
 using SimpleStrategy3D.UIModels;
 using SimpleStrategy3D.UIView;
-using SimpleStrategy3D.Utils;
+using UniRx;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Zenject;
 
 namespace SimpleStrategy3D.UIPresenters
 {
     public class CommandButtonsPresenter : MonoBehaviour
     {
+        [Inject] private IObservable<ISelectable> _selectedValue;
         [SerializeField] private SelectableValue _selectable;
         [SerializeField] private CommandButtonsView _view;
 
@@ -25,8 +26,7 @@ namespace SimpleStrategy3D.UIPresenters
             _model.OnCommandSent += _view.UnblockAllInteractions;
             _model.OnCommandCancel += _view.UnblockAllInteractions;
 
-            _selectable.OnNewValue += OnSelected;
-            OnSelected(_selectable.CurrentValue);
+            _selectedValue.Subscribe(OnSelected);
         }
 
         private void OnSelected(ISelectable selectable)

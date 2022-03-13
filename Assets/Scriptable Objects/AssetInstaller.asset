@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b770d341a5ae946429e1405f2456521d, type: 3}
   m_Name: AssetInstaller
   m_EditorClassIdentifier: 
-  _legacyContext: {fileID: 11400000, guid: ca9f6932fc056c24eae897aa08ce6a03, type: 2}
+  _legacyContext: {fileID: 11400000, guid: bdbead888f3821b4dbf21a21307d5201, type: 2}
   _groundClicksRMB: {fileID: 11400000, guid: 71070563fc5b0c044ab5a10326032b9b, type: 2}
   _attackableClicksRMB: {fileID: 11400000, guid: 87537ba78aefd054ebe4abb2e6dc8bc6, type: 2}
-  selectables: {fileID: 11400000, guid: 87184cbdb5cc6a344813fccb5d96dbdd, type: 2}
+  _selectables: {fileID: 11400000, guid: 87184cbdb5cc6a344813fccb5d96dbdd, type: 2}

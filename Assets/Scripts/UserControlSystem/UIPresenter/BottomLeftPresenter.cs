@@ -2,7 +2,8 @@ using UnityEngine.UI;
 using UnityEngine;
 using SimpleStrategy3D.Abstractions;
 using SimpleStrategy3D.UIModels;
-using UnityEngine.Serialization;
+using UniRx;
+using Zenject;
 
 namespace SimpleStrategy3D.UIPresenters
 {
@@ -14,12 +15,11 @@ namespace SimpleStrategy3D.UIPresenters
         [SerializeField] private Image _sliderBackground;
         [SerializeField] private Image _sliderFillImage;
 
-        [SerializeField] private SelectableValue _selectedValue;
+        [Inject] private SelectableValue _selectedValue;
 
         private void Start()
         {
-            _selectedValue.OnNewValue += OnPointed;
-            OnPointed(_selectedValue.CurrentValue);
+            _selectedValue.Subscribe(OnPointed);
         }
 
         private void OnPointed(ISelectable selected)

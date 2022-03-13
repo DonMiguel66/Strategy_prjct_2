@@ -3,7 +3,9 @@ using UnityEngine;
 using SimpleStrategy3D.Abstractions;
 using SimpleStrategy3D.UIModels;
 using UnityEngine.EventSystems;
-using UnityEngine.Serialization;
+using Zenject;
+using UniRx;
+using SimpleStrategy3D.Utils;
 
 namespace Assets.Scripts.SimpleStrategy3D
 {
@@ -15,45 +17,82 @@ namespace Assets.Scripts.SimpleStrategy3D
         [SerializeField] private SelectableValue _selectedObject;
         [SerializeField] private EventSystem _eventSystem;
         
-        [SerializeField] private AttackableValue _attackablesRmb;
+        [SerializeField] private AttackableValue _attackablesRMB;
         [SerializeField] private Vector3Value _groundClicksRMB;
         [SerializeField] private Transform _groundTransform;
 
         private Plane _groundPlane;
 
-        private void Start()
+        [Inject]
+        private void Init()
         {
             _groundPlane = new Plane(_groundTransform.up, 0);
-        }
+            var nonBlockedByUiFramesStream = Observable.EveryUpdate()
+                .Where(_ => !_eventSystem.IsPointerOverGameObject());
 
-        private void Update()
-        {
-            if (!Input.GetMouseButtonUp(0) && !Input.GetMouseButton(1))
-                return;
-            if (_eventSystem.IsPointerOverGameObject())
-                return;
-            var hits = Physics.RaycastAll(_camera.ScreenPointToRay(Input.mousePosition));
-            var ray = _camera.ScreenPointToRay(Input.mousePosition);
-            if (Input.GetMouseButtonUp(0))
+            var leftClicksStream = nonBlockedByUiFramesStream
+                .Where(_ => Input.GetMouseButtonDown(0));
+            var rightClicksStream = nonBlockedByUiFramesStream
+                .Where(_ => Input.GetMouseButtonDown(1));
+            var lmbRays = leftClicksStream
+                .Select(_ => _camera.ScreenPointToRay(Input.mousePosition));
+            var rmbRays = rightClicksStream
+                .Select(_ => _camera.ScreenPointToRay(Input.mousePosition));
+
+            var lmbHitsStream = lmbRays
+                .Select(ray => Physics.RaycastAll(ray));
+            var rmbHitsStream = rmbRays
+                .Select(ray => (ray, Physics.RaycastAll(ray)));
+
+            lmbHitsStream.Subscribe(hits =>
             {
                 if (IsHit<ISelectable>(hits, out var selectable))
                 {
                     _selectedObject.SetValue(selectable);
                 }
-            }
-            else
+            });
+            rmbHitsStream.Subscribe((ray, hits) =>
             {
                 if (IsHit<IAttackable>(hits, out var attackable))
                 {
-                    _attackablesRmb.SetValue(attackable);
+                    _attackablesRMB.SetValue(attackable);
                 }
                 else if (_groundPlane.Raycast(ray, out var enter))
                 {
                     _groundClicksRMB.SetValue(ray.origin + ray.direction * enter);
                 }
-            }
+            });
 
         }
+
+        //private void Update()
+        //{
+        //    if (!Input.GetMouseButtonUp(0) && !Input.GetMouseButton(1))
+        //        return;
+        //    if (_eventSystem.IsPointerOverGameObject())
+        //        return;
+        //    var hits = Physics.RaycastAll(_camera.ScreenPointToRay(Input.mousePosition));
+        //    var ray = _camera.ScreenPointToRay(Input.mousePosition);
+        //    if (Input.GetMouseButtonUp(0))
+        //    {
+        //        if (IsHit<ISelectable>(hits, out var selectable))
+        //        {
+        //            _selectedObject.SetValue(selectable);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        if (IsHit<IAttackable>(hits, out var attackable))
+        //        {
+        //            _attackablesRMB.SetValue(attackable);
+        //        }
+        //        else if (_groundPlane.Raycast(ray, out var enter))
+        //        {
+        //            _groundClicksRMB.SetValue(ray.origin + ray.direction * enter);
+        //        }
+        //    }
+
+        //}
         private bool IsHit<T>(RaycastHit[] hits, out T result) where T : class
         {
             result = default;

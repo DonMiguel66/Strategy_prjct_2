@@ -1,8 +1,7 @@
 using System;
 using SimpleStrategy3D.Abstractions;
-using SimpleStrategy3D.UIView;
+using SimpleStrategy3D.UserControlSystem;
 using SimpleStrategy3D.Utils;
-using UnityEngine;
 using Zenject;
 
 namespace SimpleStrategy3D.UIModels
